@@ -14,17 +14,16 @@ jobs:
         with:
           ruby-version: 3.1
       - run: gem install --no-document git-pr-release
+      - run: |
+          echo 'Release <%= Time.now %>' > git-pr-release-template.erb
+          echo '<% pull_requests.each do |pr| -%>' >> git-pr-release-template.erb
+          echo '<%=  pr.to_checklist_item %>' >> git-pr-release-template.erb
+          echo '<% end -%>' >> git-pr-release-template.erb
       - run: git-pr-release # --squashed
         env:
           GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_PR_RELEASE_BRANCH_PRODUCTION: main
           GIT_PR_RELEASE_BRANCH_STAGING: dev
           GIT_PR_RELEASE_LABELS: pr-release
-          GIT_PR_RELEASE_TEMPLATE: |
-            ## How to deploy
-            ...
-            ## Items to be Released
-            <% pull_requests.each do |pr| -%>
-            - #<%=  pr.number %> <%= pr.mention %>
-            <% end -%>
+          GIT_PR_RELEASE_TEMPLATE: git-pr-release-template.erb
           TZ: Asia/Tokyo
