@@ -14,11 +14,17 @@ jobs:
         with:
           ruby-version: 3.1
       - run: gem install --no-document git-pr-release
-      - run: git-pr-release --squashed
+      - run: |
+          echo 'Release <%= Time.now %>' > git-pr-release-template.erb
+          echo 'This release PR includes:' >> git-pr-release-template.erb
+          echo '<% pull_requests.each do |pr| -%>' >> git-pr-release-template.erb
+          echo '<%= "- ##{pr.number}" %>' >> git-pr-release-template.erb
+          echo '<% end -%>' >> git-pr-release-template.erb
+      - run: git-pr-release # --squashed
         env:
           GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_PR_RELEASE_BRANCH_PRODUCTION: main
           GIT_PR_RELEASE_BRANCH_STAGING: dev
           GIT_PR_RELEASE_LABELS: pr-release
-#           GIT_PR_RELEASE_TEMPLATE: 
+          GIT_PR_RELEASE_TEMPLATE: git-pr-release-template.erb
           TZ: Asia/Tokyo
