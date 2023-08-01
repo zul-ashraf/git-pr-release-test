@@ -20,5 +20,11 @@ jobs:
           GIT_PR_RELEASE_BRANCH_PRODUCTION: main
           GIT_PR_RELEASE_BRANCH_STAGING: dev
           GIT_PR_RELEASE_LABELS: pr-release
-#           GIT_PR_RELEASE_TEMPLATE: 
+          GIT_PR_RELEASE_TEMPLATE: |
+            ## How to deploy
+            ...
+            ## Items to be Released
+            <% pull_requests.each do |pr| -%>
+            - #<%=  pr.number %> <%= pr.mention %>
+            <% end -%>
           TZ: Asia/Tokyo
