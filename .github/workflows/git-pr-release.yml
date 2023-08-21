@@ -20,7 +20,7 @@ jobs:
           echo '<% pull_requests.each do |pr| -%>' >> git-pr-release-template.erb
           echo '<%= "- ##{pr.number}" %>' >> git-pr-release-template.erb
           echo '<% end -%>' >> git-pr-release-template.erb
-      - run: git-pr-release # --squashed
+      - run: git-pr-release 
         env:
           GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_PR_RELEASE_BRANCH_PRODUCTION: main
